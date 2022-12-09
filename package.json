@@ -1,6 +1,6 @@
 {
     "name": "@ajbowen249/lait",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "license": "MIT",
     "bin": {
         "lait": "./packages/lait/dist/index.js"
@@ -9,13 +9,12 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "lerna run build"
+        "build": "lerna run build",
+        "install": "npm run build"
     },
     "dependencies": {
         "@types/node": "^18.11.11",
-        "lait": "*",
         "ts-node": "^10.9.1",
-        "transpiler": "*",
         "typescript": "^4.9.4"
     },
     "devDependencies": {
