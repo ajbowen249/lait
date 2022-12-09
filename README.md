@@ -84,7 +84,7 @@ Name,Age,ID
 Carol,25,2lf8ah
 Bob,21,j8efy3g
 Jesse,34,j8fhiuad8
-Hysco@LAPTOP-MKSELCM3 MINGW64 ~/Documents/Code/personal/lait/demo (main)
+
 $ lait 'FS=`,`; { print($[0], `#${$[2]}`); }' demo.csv
 Name #ID
 Carol #2lf8ah
@@ -94,7 +94,7 @@ Jesse #j8fhiuad8
 
 ## Installation
 
-All you gotta go is
+All you gotta do is
 
 ```shell
 npm i -g @ajbowen249/lait
