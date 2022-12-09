@@ -1,8 +1,7 @@
 {
     "extends": "../../tsconfig.default.json",
     "compilerOptions": {
-        "module": "system",
-        "outFile": "./dist/index.js",
+        "outDir": "./dist",
     },
     "include": [
         "src/**/*.ts",
