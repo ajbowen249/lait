@@ -1,5 +1,5 @@
 {
-    "name": "lait",
+    "name": "@ajbowen249/lait-core",
     "version": "1.0.0",
     "description": "the lait binary",
     "main": "dist/index.js",

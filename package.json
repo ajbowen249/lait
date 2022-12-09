@@ -1,16 +1,15 @@
 {
     "name": "@ajbowen249/lait",
-    "version": "0.0.5",
+    "version": "0.0.14",
     "license": "MIT",
     "bin": {
-        "lait": "./packages/lait/dist/index.js"
+        "lait": "./packages/lait-core/dist/index.js"
     },
     "workspaces": [
         "packages/*"
     ],
     "scripts": {
-        "build": "lerna run build",
-        "install": "npm run build"
+        "build": "npx lerna run build"
     },
     "dependencies": {
         "@types/node": "^18.11.11",
