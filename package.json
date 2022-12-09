@@ -1,9 +1,9 @@
 {
     "name": "@ajbowen249/lait",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "license": "MIT",
     "bin": {
-        "lait": "./packages/lait/dist/index.js"
+        "lait": "./packages/lait-core/dist/index.js"
     },
     "workspaces": [
         "packages/*"
@@ -13,9 +13,7 @@
     },
     "dependencies": {
         "@types/node": "^18.11.11",
-        "lait": "*",
         "ts-node": "^10.9.1",
-        "transpiler": "*",
         "typescript": "^4.9.4"
     },
     "devDependencies": {

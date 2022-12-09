@@ -1,5 +1,5 @@
 {
-    "name": "transpiler",
+    "name": "@ajbowen249/lait-transpiler",
     "version": "1.0.0",
     "description": "transpiler for lait",
     "main": "dist/index.js",
