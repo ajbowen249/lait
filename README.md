@@ -74,8 +74,8 @@ Order ID starts with digit:
 Note that programs of this size are less common. Like `awk`, `lait` programs are meant to be small and integrated into
 shell operations.
 
-For now, the only input given to handlers is `$`, the array of "fields" on the line. Unlike `awk`, the array is simply a
-zero-based array of fields, and there is not a "complete line" entry (yet). Like `awk`, the default field separator is
+The first input given to handlers is `$`, the array of "fields" on the line. Unlike `awk`, the array is simply a zero-
+based array of fields, and there is not a "complete line" entry in `$`. Like `awk`, the default field separator is
 space, and it can be overridden via the `FS` global:
 
 ```shell
@@ -90,6 +90,16 @@ Name #ID
 Carol #2lf8ah
 Bob #j8efy3g
 Jesse #j8fhiuad8
+```
+
+In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from when it was compared to the regex:
+
+```shell
+$ lait '/(?<id>#\w{5}) (?<i>\w+) (?<q>\d+)/; { const g=m.groups; print(g.q, g.i) }' demo_input
+16 Socks
+2 Avacado
+1 Shampoo
+3 Candle
 ```
 
 `lait` can also accept input from standard in:
@@ -118,22 +128,21 @@ space-aligned data like in the `ls` example. That's less useful when processing 
 
 ```shell
 $ cat demo2.csv
-Name, Favorite Film (Optional), Score
-Cathy Smith, A Fistful of Dollars, 78
-Paulo Henry MacMasterson III, Finding Nemo, 4
-Bob Nofunpants,, 4
+Name,Favorite Film (Optional),Score
+Cathy Smith,A Fistful of Dollars,78
+Paulo Henry MacMasterson III,Finding Nemo,4
+Bob Nofunpants,,4
 
-$ lait 'FS=`,`;TRIM_EMPTY=false; { print($[0], $[1] || ` does not like movies :(`)  }' demo2.c
-sv
-Name  Favorite Film (Optional)
-Cathy Smith  A Fistful of Dollars
-Paulo Henry MacMasterson III  Finding Nemo
-Bob Nofunpants  does not like movies :(
+$ lait 'FS=`,`;TRIM_EMPTY=false; { print($[0], $[1] || `does not like movies :(`)  }' demo2.csv
+Name Favorite Film (Optional)
+Cathy Smith A Fistful of Dollars
+Paulo Henry MacMasterson III Finding Nemo
+Bob Nofunpants does not like movies :(
 ```
 
 Without `TRIM_EMPTY=false;`, the last line of that would have been:
 ```shell
-Bob Nofunpants  4
+Bob Nofunpants 4
 ```
 
 
@@ -153,10 +162,9 @@ While `awk` is a very powerful tool, it can have a few rough edges. Those being:
 2. Regex Syntax - `awk` has yet another regular expression syntax to remember, and it even varies by vendor.
 3. Scripting Syntax - Like the regex point, `awk` using its own scripting language means one must play the, "is _this_
    how I do x in this language?" game. While `TypeScript` (and, let's be real, using the type system here will be rare)
-   is certainly not universal, its much more likely someone willing to install an `NPM` package will be familiar with
+   is certainly not universal, it's much more likely someone willing to install an `NPM` package will be familiar with
    it. Standard `awk` is also light on language features and built-ins, and having built-in array sort and higher-order
    functions should prove useful in problems typically solved with `awk`.
 
 ## Features ComingSoon™
-- Pass regex capture groups to handlers
 - imports
