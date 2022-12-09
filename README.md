@@ -8,12 +8,12 @@ against a list of regular expressions and runs the first block of code it matche
 $ cat demo_input
 OrderId Item Quantity
 #a2fr5 Socks 16
-#d8j38 Avacado 2
+#d8j38 Avocado 2
 #8fh39 Shampoo 1
 #qb6ag Candle 3
 $ lait '/#\w{5} \w+ \d+/; { print($[2], $[1]) }' demo_input
 16 Socks
-2 Avacado
+2 Avocado
 1 Shampoo
 3 Candle
 ```
@@ -22,7 +22,7 @@ A `lait` program is just a `TypeScript` script. However, `lait` picks it apart a
 top-level blocks preceded by a regular expression literal are registered as handlers for matching lines of input. A top-
 level block not preceded by a regex will be registered as the default handler if given. Any statements written before
 the first handler will be run before scanning input, and all code after the first handler definition will be run after
-processing input. Note that this means there is no need for an exlicit `BEGIN` or `END` block like in `awk`.
+processing input. Note that this means there is no need for an explicit `BEGIN` or `END` block like in `awk`.
 
 Let's take a look at a more complicated `lait` script. Like `awk`, `lait` can take a file as its script input:
 
@@ -65,7 +65,7 @@ print('Order ID starts with digit:\n', digitOrders.map(toTable).join('\n'));
 $ lait -f demo.lait.ts demo_input 
 Order ID starts with letter:
 #a2fr5: 16 Socks
-#d8j38: 2 Avacado
+#d8j38: 2 Avocado
 #qb6ag: 3 Candle
 Order ID starts with digit:
 #8fh39: 1 Shampoo
@@ -97,7 +97,7 @@ In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from
 ```shell
 $ lait '/(?<id>#\w{5}) (?<i>\w+) (?<q>\d+)/; { const g=m.groups; print(g.q, g.i) }' demo_input
 16 Socks
-2 Avacado
+2 Avocado
 1 Shampoo
 3 Candle
 ```
