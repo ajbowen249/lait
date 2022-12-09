@@ -1,13 +1,25 @@
 {
-  "name": "root",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "lerna run build"
-  },
-  "devDependencies": {
-    "lerna": "^6.1.0"
-  }
+    "name": "lait",
+    "version": "0.0.1",
+    "license": "MIT",
+    "bin": {
+        "lait": "./packages/lait/dist/index.js"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "lerna run build"
+    },
+    "devDependencies": {
+        "lerna": "^6.1.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ajbowen249/lait.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ajbowen249/lait/issues"
+    },
+   "homepage": "https://github.com/ajbowen249/lait"
 }
