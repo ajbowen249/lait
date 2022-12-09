@@ -1,0 +1,21 @@
+{
+    "name": "lait",
+    "version": "1.0.0",
+    "description": "the lait binary",
+    "main": "dist/index.js",
+    "bin": {
+        "lait": "./dist/index.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^18.11.11",
+        "transpiler": "*",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
+    }
+}
