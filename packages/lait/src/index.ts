@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as fs from 'fs/promises';
 import * as tsNode from 'ts-node';
-import { transpile } from 'transpiler/dist';
+import { transpile } from 'transpiler';
 import { exit } from 'process';
 
 interface ParsedArgs {
