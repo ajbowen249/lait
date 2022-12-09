@@ -92,6 +92,14 @@ Bob #j8efy3g
 Jesse #j8fhiuad8
 ```
 
+## Installation
+
+All you gotta go is
+
+```shell
+npm i -g @ajbowen249/lait
+```
+
 ## But Why?
 
 While `awk` is a very powerful tool, it can have a few rough edges. Those being:
@@ -107,5 +115,4 @@ While `awk` is a very powerful tool, it can have a few rough edges. Those being:
 ## Features ComingSoon™
 - Pass regex capture groups to handlers
 - Input from standard in
-- Register with npm
 - imports
