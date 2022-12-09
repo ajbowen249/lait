@@ -92,6 +92,51 @@ Bob #j8efy3g
 Jesse #j8fhiuad8
 ```
 
+`lait` can also accept input from standard in:
+
+```shell
+$ ls -al
+total 14
+drwxr-xr-x 1 user 197609   0 Dec  8 22:01 .
+drwxr-xr-x 1 user 197609   0 Dec  8 21:47 ..
+-rw-r--r-- 1 user 197609  61 Dec  8 19:19 demo.csv
+-rw-r--r-- 1 user 197609 699 Dec  8 22:01 demo.lait.ts
+-rw-r--r-- 1 user 197609  87 Dec  8 18:46 demo_input
+
+$ ls -al | lait '/^d|-/;{print($[8], `(${$[4]} bytes)`)}'
+. (0 bytes)
+.. (0 bytes)
+demo.csv (61 bytes)
+demo.lait.ts (699 bytes)
+demo_input (87 bytes)
+```
+
+## Globals
+
+In addition to `FS`, there is also `TRIM_EMPTY`, which is `true` by default as is usually convenient for processing
+space-aligned data like in the `ls` example. That's less useful when processing CSVs:
+
+```shell
+$ cat demo2.csv
+Name, Favorite Film (Optional), Score
+Cathy Smith, A Fistful of Dollars, 78
+Paulo Henry MacMasterson III, Finding Nemo, 4
+Bob Nofunpants,, 4
+
+$ lait 'FS=`,`;TRIM_EMPTY=false; { print($[0], $[1] || ` does not like movies :(`)  }' demo2.c
+sv
+Name  Favorite Film (Optional)
+Cathy Smith  A Fistful of Dollars
+Paulo Henry MacMasterson III  Finding Nemo
+Bob Nofunpants  does not like movies :(
+```
+
+Without `TRIM_EMPTY=false;`, the last line of that would have been:
+```shell
+Bob Nofunpants  4
+```
+
+
 ## Installation
 
 All you gotta do is
@@ -114,5 +159,4 @@ While `awk` is a very powerful tool, it can have a few rough edges. Those being:
 
 ## Features ComingSoon™
 - Pass regex capture groups to handlers
-- Input from standard in
 - imports
