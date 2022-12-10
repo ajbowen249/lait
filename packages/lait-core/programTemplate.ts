@@ -14,7 +14,7 @@ async function getInputFileLines() {
     return (await fs.readFile(INPUT_FILE)).toString().split('\n');
 }
 
-type HandlerFunc = ($: string[], m: RegExpMatchArray) => Promise<void>;
+type HandlerFunc = ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => Promise<void>;
 
 interface Handler {
     regex: RegExp;
@@ -42,7 +42,7 @@ async function main() {
         for (const handler of LAIT_PROGRAM_HANDLERS) {
             const match = line.match(handler.regex);
             if (match) {
-                await handler.handler(fields, match);
+                await handler.handler(fields, match, match.groups);
                 handled = true;
                 break;
             }

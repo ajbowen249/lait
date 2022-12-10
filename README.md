@@ -92,14 +92,15 @@ Bob #j8efy3g
 Jesse #j8fhiuad8
 ```
 
-In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from when it was compared to the regex:
+In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from when it was compared to the regex, as
+well as `g`, the (possibly undefined) set of capture groups, aka `m.groups`:
 
 ```shell
-$ lait '/(?<id>#\w{5}) (?<i>\w+) (?<q>\d+)/; { const g=m.groups; print(g.q, g.i) }' demo_input
-16 Socks
-2 Avocado
-1 Shampoo
-3 Candle
+lait '/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }' demo_input
+16 Socks #a2fr5 Socks 16
+2 Avocado #d8j38 Avocado 2
+1 Shampoo #8fh39 Shampoo 1
+3 Candle #qb6ag Candle 3
 ```
 
 `lait` can also accept input from standard in:

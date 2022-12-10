@@ -72,14 +72,14 @@ export async function transpile(inputScript: string, inputFilePath: string): Pro
         '// HANDLERS',
         regexBlockPairs.map(pair => {
             const reText = pair.regex.getText(ast);
-            return `            { regex: ${reText.substring(0, reText.length - 1)}, handler: async ($: string[], m: RegExpMatchArray) => ${pair.block.getText(ast)} }`;
+            return `{ regex: ${reText.substring(0, reText.length - 1)}, handler: async ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => ${ pair.block.getText(ast)} }`;
         }).join(',\n'),
     );
 
     if (defaultBlock) {
         outputString = outputString.replace(
             '// DEFAULT_HANDLER',
-            `            ${defaultBlock.getText(ast)}`,
+            `${defaultBlock.getText(ast)}`,
         );
     }
 
