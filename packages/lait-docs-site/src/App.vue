@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
@@ -19,6 +14,17 @@ import HelloWorld from './components/HelloWorld.vue'
 
   <RouterView />
 </template>
+
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import HelloWorld from './components/HelloWorld.vue'
+import * as t from '../../lait-core/src/transpiler';
+
+t.transpile('console.log("log from transpiled program");', '', '// INIT_STATEMENTS').then(x => {
+  console.log('script:', x);
+  eval(x);
+});
+</script>
 
 <style scoped>
 header {
