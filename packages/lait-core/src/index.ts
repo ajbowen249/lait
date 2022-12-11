@@ -68,6 +68,7 @@ async function main() {
             esModuleInterop: true,
         },
         transpileOnly: true,
+        cwd: process.cwd(),
     });
 
     const transpiledScript = await transpile(inputScript, filePath);

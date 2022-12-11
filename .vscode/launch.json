@@ -11,9 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/packages/lait/dist/index.js",
+            "program": "${workspaceFolder}/packages/lait-core/dist/index.js",
             "args": [
-                "const x = 12; /abc/;{console.log('lol');} console.log('end');"
+                "import * as util from 'util'; const x = 12; /abc/;{console.log('lol');} console.log('end');"
             ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"

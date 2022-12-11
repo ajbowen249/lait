@@ -146,6 +146,17 @@ Without `TRIM_EMPTY=false;`, the last line of that would have been:
 Bob Nofunpants 4
 ```
 
+## Imports
+
+You can import from the Node standard library, as well as any node modules you would expect to be accessible either
+globally or from a module installed in the working directory's `node_modules`.
+
+```shell
+$ lait 'import * as _ from "lodash"; print(_.isNumber(12));'
+true
+```
+
+> *Note:* Imports from local files are not yet working
 
 ## Installation
 
@@ -166,6 +177,3 @@ While `awk` is a very powerful tool, it can have a few rough edges. Those being:
    is certainly not universal, it's much more likely someone willing to install an `NPM` package will be familiar with
    it. Standard `awk` is also light on language features and built-ins, and having built-in array sort and higher-order
    functions should prove useful in problems typically solved with `awk`.
-
-## Features ComingSoon™
-- imports

@@ -41,7 +41,7 @@ export async function transpile(inputScript: string, inputFilePath: string): Pro
 
             // eat the next block
             (next as any).wasParsed = true;
-        } else if (current.kind === ts.SyntaxKind.ImportClause) {
+        } else if (current.kind === ts.SyntaxKind.ImportDeclaration) {
             importStatements.push(current);
         } else if (current.kind === ts.SyntaxKind.Block) {
             defaultBlock = current;
