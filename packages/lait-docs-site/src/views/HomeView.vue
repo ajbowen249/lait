@@ -1,9 +1,9 @@
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+    <main>
+        <LaitPlayground />
+    </main>
 </template>
+
+<script setup lang="ts">
+import LaitPlayground from '@/components/LaitPlayground.vue';
+</script>
