@@ -1,7 +1,4 @@
 import * as ts from 'typescript';
-import * as fs_raw from 'fs';
-
-const fs = fs_raw.promises;
 
 interface RegexStatement extends ts.Statement {
     expression: ts.RegularExpressionLiteral;
@@ -12,8 +9,7 @@ interface RegexPair {
     block: ts.Statement;
 }
 
-export async function transpile(inputScript: string, inputFilePath: string): Promise<string> {
-    const templateFile = (await fs.readFile([__dirname, '../programTemplate.ts'].join('/'))).toString();
+export async function transpile(inputScript: string, inputFilePath: string, templateFile: string): Promise<string> {
     const ast = ts.createSourceFile('temp.ts', inputScript, ts.ScriptTarget.ES2022);
     const regexBlockPairs: RegexPair[] = [];
     const importStatements: ts.Statement[] = [];
