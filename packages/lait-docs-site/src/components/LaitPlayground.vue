@@ -1,88 +1,46 @@
 <template>
-    <label for="fileInput">Input</label><br />
+    <label for="fileInput">Input</label>
+    <button
+        v-if="!!defaultFileInput && fileInput !== defaultFileInput"
+        @click="() => fileInput = defaultFileInput || ''"
+    >
+        Reset
+    </button>
+    <br />
     <textarea v-model="fileInput" id="fileInput" cols="80" rows="10" /><br />
 
-    <label for="scriptInput">Script</label><br />
+    <label for="scriptInput">Script</label>
+    <button
+        v-if="!!defaultScriptInput && scriptInput !== defaultScriptInput"
+        @click="() => scriptInput = defaultScriptInput || ''"
+    >
+        Reset
+    </button>
+    <br />
     <textarea v-model="scriptInput" id="scriptInput" cols="80" /><br />
 
-    <button @click="run">Run</button><br />
 
-    <label for="output">Output</label><br />
+    <label for="output">Output</label>
+    <button @click="run">Run</button>
+    <button @click="() => consoleOutput = ''">Clear</button>
+    <br />
     <textarea v-model="consoleOutput" id="output" cols="80" rows="25" disabled /><br />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 import * as t from '../../../lait-core/src/transpiler';
 import * as ts from 'typescript';
+import { browserTemplate } from '@/browserProgramTemplate';
 
-const scriptInput = ref('/#\\w{5} \\w+ \\d+/; { print($[2], $[1]) }');
-const fileInput = ref(`OrderId Item Quantity
-#a2fr5 Socks 16
-#d8j38 Avocado 2
-#8fh39 Shampoo 1
-#qb6ag Candle 3`);
+const props = defineProps<{
+    defaultScriptInput?: string,
+    defaultFileInput?: string,
+}>();
+
+const scriptInput = ref('');
+const fileInput = ref('');
 const consoleOutput = ref('');
-
-const browserTemplate = `
-let FS = ' ';
-let TRIM_EMPTY = true;
-
-// for convenience
-const print = console.log.bind(console);
-
-const LAIT_PROGRAM_INPUT_LINES = [
-    // BROWSER_INPUT_LINES
-];
-
-type HandlerFunc = ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => Promise<void>;
-
-interface Handler {
-    regex: RegExp;
-    handler: HandlerFunc,
-}
-
-async function main() {
-    // INIT_STATEMENTS
-
-    const LAIT_PROGRAM_HANDLERS: Handler[] = [
-        // HANDLERS
-    ];
-
-    let LAIT_DEFAULT_HANDLER = async ($: string[]) => {
-        // DEFAULT_HANDLER
-    };
-
-    const processLine = async (line: string) => {
-        let handled = false;
-        let fields = line.split(FS);
-        if (TRIM_EMPTY) {
-            fields = fields.filter(x => x !== '');
-        }
-
-        for (const handler of LAIT_PROGRAM_HANDLERS) {
-            const match = line.match(handler.regex);
-            if (match) {
-                await handler.handler(fields, match, match.groups);
-                handled = true;
-                break;
-            }
-        }
-
-        if (!handled) {
-            await LAIT_DEFAULT_HANDLER(fields);
-        }
-    };
-
-    for (const line of LAIT_PROGRAM_INPUT_LINES) {
-        processLine(line);
-    }
-
-    // END_STATEMENTS
-}
-
-main();
-`;
 
 function getScriptTemplate() {
     return browserTemplate.replace(
@@ -104,6 +62,17 @@ function run() {
         console.log = consoleLog;
     });
 }
+
+onMounted(() => {
+    if (props.defaultFileInput) {
+        fileInput.value = props.defaultFileInput;
+    }
+
+    if (props.defaultScriptInput) {
+        scriptInput.value = props.defaultScriptInput;
+        run();
+    }
+});
 </script>
 
 <style scoped>
