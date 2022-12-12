@@ -95,29 +95,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-textarea {
-    background-color: var(--color-mocha-dark);
-    color: var(--color-white-mute);
-    border: 1px solid var(--color-white-mute);
-    border-radius: 8px;
-    height: auto;
-}
 
-.code-editor {
-    border: 1px solid var(--color-white-mute);
-    border-radius: 8px;
-    height: auto;
-    background: var(--color-mocha-dark);
-    color: var(--color-white-mute);
-
-    font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 5px;
-}
-
-/* optional class for removing the outline */
-.prism-editor__textarea:focus {
-    outline: none;
-}
 </style>

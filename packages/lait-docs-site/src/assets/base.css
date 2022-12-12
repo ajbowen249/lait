@@ -50,6 +50,11 @@
   font-weight: normal;
 }
 
+.code-span {
+  font-family: monospace;
+  color: var(--color-purple-mute);
+}
+
 body {
   min-height: 100vh;
   color: var(--color-text);
@@ -64,6 +69,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body::-webkit-scrollbar{
+  display: none;
+}
+
 button {
   border: 2px solid var(--color-purple-mute);
   border-radius: 8px;
@@ -75,4 +84,47 @@ button {
 label {
   color: var(--color-white-mute);
   line-height: 2.5rem;
+}
+
+textarea {
+  background-color: var(--color-mocha-dark);
+  color: var(--color-white-mute);
+  border: 1px solid var(--color-white-mute);
+  border-radius: 8px;
+  height: auto;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-blue-mute);
+  transition: 0.4s;
+}
+
+main {
+  max-width: 1024px;
+  margin: auto;
+}
+
+.code-editor {
+  border: 1px solid var(--color-white-mute);
+  border-radius: 8px;
+  height: auto;
+  background: var(--color-mocha-dark);
+  color: var(--color-white-mute);
+
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+}
+
+.prism-editor__textarea:focus {
+  outline: none;
+}
+
+@media (max-width: 1024px) {
+  textarea, .code-editor {
+    font-size: 10px;
+  }
 }

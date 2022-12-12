@@ -1,5 +1,7 @@
 # lait; an AWK-inspired TypeScript Command-Line Utility
 
+> Check out the interactive version of these docs [here](https://ajbowen249.github.io/lait/)!
+
 `lait` is a command-line utility designed as an alternative to `awk`. Like `awk`, `lait` matches input line-by-line
 against a list of regular expressions and runs the first block of code it matches. Unlike `awk`, `lait` uses
 `TypeScript` as its scripting language.
@@ -57,12 +59,15 @@ function toTable(order: Order) {
 }
 
 // Note: print is just an alias of console.log
-print('Order ID starts with letter:\n', letterOrders.map(toTable).join('\n'));
-print('Order ID starts with digit:\n', digitOrders.map(toTable).join('\n'));
+print('Order ID starts with letter:');
+print(letterOrders.map(toTable).join('\n'));
+
+print('Order ID starts with digit:');
+print(digitOrders.map(toTable).join('\n'));
 ```
 
 ```shell
-$ lait -f demo.lait.ts demo_input 
+$ lait -f demo.lait.ts demo_input
 Order ID starts with letter:
 #a2fr5: 16 Socks
 #d8j38: 2 Avocado
