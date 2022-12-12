@@ -57,12 +57,15 @@ function toTable(order: Order) {
 }
 
 // Note: print is just an alias of console.log
-print('Order ID starts with letter:\n', letterOrders.map(toTable).join('\n'));
-print('Order ID starts with digit:\n', digitOrders.map(toTable).join('\n'));
+print('Order ID starts with letter:');
+print(letterOrders.map(toTable).join('\n'));
+
+print('Order ID starts with digit:');
+print(digitOrders.map(toTable).join('\n'));
 ```
 
 ```shell
-$ lait -f demo.lait.ts demo_input 
+$ lait -f demo.lait.ts demo_input
 Order ID starts with letter:
 #a2fr5: 16 Socks
 #d8j38: 2 Avocado
