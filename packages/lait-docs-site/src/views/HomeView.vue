@@ -1,5 +1,6 @@
 <template>
     <main>
+        <img class="lait-image" src="/lait.webp" /><br />
         <h1>lait; an AWK-inspired TypeScript Command-Line Utility</h1>
 
         <i><a href="https://github.com/ajbowen249/lait">GitHub</a></i>,
@@ -216,3 +217,13 @@ Paulo Henry MacMasterson III,Finding Nemo,4
 Bob Nofunpants,,4`);
 
 </script>
+
+<style scoped>
+.lait-image {
+    width: 300px;
+    display: block;
+    margin: auto;
+    border: 2px solid var(--color-white-mute);
+    border-radius: 20px;
+}
+</style>
