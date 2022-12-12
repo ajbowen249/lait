@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
+// @ts-ignore
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
@@ -47,7 +48,7 @@ import * as t from '../../../lait-core/src/transpiler';
 import * as ts from 'typescript';
 import { browserTemplate } from '@/browserProgramTemplate';
 
-function highlighter(code) {
+function highlighter(code: any) {
     return highlight(code, languages.typescript);
 }
 
