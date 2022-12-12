@@ -1,6 +1,5 @@
 <template>
     <main>
-        <img class="lait-image" src="/lait.webp" /><br />
         <h1>lait; an AWK-inspired TypeScript Command-Line Utility</h1>
 
         <i><a href="https://github.com/ajbowen249/lait">GitHub</a></i>,
