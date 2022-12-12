@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.default.json",
+  "files": [],
+  "include": [
+    "../lait-core/src/transpiler.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.vitest.json"
+    }
+  ]
+}

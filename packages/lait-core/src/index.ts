@@ -39,6 +39,7 @@ interface AppArgs {
 
 async function main() {
     const args = getArgs(argsSchema) as AppArgs;
+    const templateFile = (await fs.readFile([__dirname, '../programTemplate.ts'].join('/'))).toString();
 
     if (args.named.help) {
         describe(argsSchema);
@@ -71,7 +72,7 @@ async function main() {
         cwd: process.cwd(),
     });
 
-    const transpiledScript = await transpile(inputScript, filePath);
+    const transpiledScript = await transpile(inputScript, filePath, templateFile);
 
     if (args.named.transpileOnly) {
         console.log(transpiledScript);

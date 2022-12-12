@@ -1,0 +1,130 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --color-white: #ffffff;
+  --color-white-soft: #f8f8f8;
+  --color-white-mute: #f2f2f2;
+
+  --color-black: #181818;
+  --color-black-soft: #222222;
+  --color-black-mute: #282828;
+
+  --color-mocha: #967969;
+  --color-mocha-dark: #4C3D34;
+
+  --color-success: #4DAA57;
+
+  --color-purple-mute: #A09BE7;
+
+  --color-indigo: #2c3e50;
+
+  --color-blue-mute: #5998C5;
+
+  --color-divider-light-1: rgba(60, 60, 60, 0.29);
+  --color-divider-light-2: rgba(60, 60, 60, 0.12);
+  --color-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --color-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  --color-text-light-1: var(--color-indigo);
+  --color-text-light-2: rgba(60, 60, 60, 0.66);
+  --color-text-dark-1: var(--color-white);
+  --color-text-dark-2: rgba(235, 235, 235, 0.64);
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background: var(--color-mocha);
+
+  --color-border: var(--color-divider-dark-2);
+  --color-border-hover: var(--color-divider-dark-1);
+
+  --color-heading: var(--color-text-dark-1);
+  --color-text: var(--color-text-dark-2);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+.code-span {
+  font-family: monospace;
+  color: var(--color-purple-mute);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::-webkit-scrollbar{
+  display: none;
+}
+
+button {
+  border: 2px solid var(--color-purple-mute);
+  border-radius: 8px;
+  background-color: var(--color-purple-mute);
+  color: var(--color-white-mute);
+  margin: .1rem;
+}
+
+label {
+  color: var(--color-white-mute);
+  line-height: 2.5rem;
+}
+
+textarea {
+  background-color: var(--color-mocha-dark);
+  color: var(--color-white-mute);
+  border: 1px solid var(--color-white-mute);
+  border-radius: 8px;
+  height: auto;
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-blue-mute);
+  transition: 0.4s;
+}
+
+main {
+  max-width: 1024px;
+  margin: auto;
+}
+
+.code-editor {
+  border: 1px solid var(--color-white-mute);
+  border-radius: 8px;
+  height: auto;
+  background: var(--color-mocha-dark);
+  color: var(--color-white-mute);
+
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+}
+
+.prism-editor__textarea:focus {
+  outline: none;
+}
+
+@media (max-width: 1024px) {
+  textarea, .code-editor {
+    font-size: 10px;
+  }
+}
