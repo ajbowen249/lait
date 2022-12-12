@@ -7,7 +7,7 @@
         Reset
     </button>
     <br />
-    <textarea v-model="fileInput" id="fileInput" cols="80" rows="10" /><br />
+    <textarea v-model="fileInput" id="fileInput" cols="80" rows="7" /><br />
 
     <label for="scriptInput">Script</label>
     <button
@@ -17,21 +17,40 @@
         Reset
     </button>
     <br />
-    <textarea v-model="scriptInput" id="scriptInput" cols="80" /><br />
+    <prism-editor
+        class="code-editor"
+        v-model="scriptInput"
+        :highlight="highlighter"
+        line-numbers
+        rows="1"
+    />
 
 
     <label for="output">Output</label>
     <button @click="run">Run</button>
     <button @click="() => consoleOutput = ''">Clear</button>
     <br />
-    <textarea v-model="consoleOutput" id="output" cols="80" rows="25" disabled /><br />
+    <textarea v-model="consoleOutput" id="output" cols="80" rows="10" disabled /><br />
 </template>
 
 <script setup lang="ts">
+import { PrismEditor } from 'vue-prism-editor';
+import 'vue-prism-editor/dist/prismeditor.min.css';
+// @ts-ignore
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/themes/prism-tomorrow.css';
+
 import { ref, defineProps, onMounted } from 'vue';
 import * as t from '../../../lait-core/src/transpiler';
 import * as ts from 'typescript';
 import { browserTemplate } from '@/browserProgramTemplate';
+
+function highlighter(code: any) {
+    return highlight(code, languages.typescript);
+}
 
 const props = defineProps<{
     defaultScriptInput?: string,
@@ -77,14 +96,28 @@ onMounted(() => {
 
 <style scoped>
 textarea {
-    background-color: #808080;
-    color: #ffffff;
+    background-color: var(--color-mocha-dark);
+    color: var(--color-white-mute);
+    border: 1px solid var(--color-white-mute);
+    border-radius: 8px;
+    height: auto;
 }
 
-button {
-    border: 2px solid #00A000;
+.code-editor {
+    border: 1px solid var(--color-white-mute);
     border-radius: 8px;
-    background-color: #00A000;
-    color: #ffffff;
+    height: auto;
+    background: var(--color-mocha-dark);
+    color: var(--color-white-mute);
+
+    font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 5px;
+}
+
+/* optional class for removing the outline */
+.prism-editor__textarea:focus {
+    outline: none;
 }
 </style>

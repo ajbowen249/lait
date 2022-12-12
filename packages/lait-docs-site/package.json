@@ -8,11 +8,14 @@
     "preview": "vite preview",
     "test:unit": "vitest --environment jsdom --root src/",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+    "type-check": "npx vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "prismjs": "^1.29.0",
+    "run-p": "^0.0.0",
     "vue": "^3.2.45",
+    "vue-prism-editor": "^2.0.0-alpha.2",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
