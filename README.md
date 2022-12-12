@@ -1,5 +1,7 @@
 # lait; an AWK-inspired TypeScript Command-Line Utility
 
+> Check out the interactive version of these docs [here](https://ajbowen249.github.io/lait/)!
+
 `lait` is a command-line utility designed as an alternative to `awk`. Like `awk`, `lait` matches input line-by-line
 against a list of regular expressions and runs the first block of code it matches. Unlike `awk`, `lait` uses
 `TypeScript` as its scripting language.

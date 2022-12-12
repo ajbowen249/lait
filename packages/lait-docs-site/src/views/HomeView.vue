@@ -1,6 +1,10 @@
 <template>
     <main>
         <h1>lait; an AWK-inspired TypeScript Command-Line Utility</h1>
+
+        <i><a href="https://github.com/ajbowen249/lait">GitHub</a></i>,
+        <i><a href="https://www.npmjs.com/package/@ajbowen249/lait">NPM</a></i>
+
         <p>
             <span class="code-span">lait</span> is a command-line utility designed as an alternative to <span class="code-span">awk</span>. Like
             <span class="code-span">awk</span>, <span class="code-span">lait</span> matches input line-by-line against a list of regular expressions and runs

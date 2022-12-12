@@ -90,6 +90,12 @@ textarea {
   height: auto;
 }
 
+a {
+  text-decoration: none;
+  color: var(--color-blue-mute);
+  transition: 0.4s;
+}
+
 .code-editor {
   border: 1px solid var(--color-white-mute);
   border-radius: 8px;
@@ -103,7 +109,6 @@ textarea {
   padding: 5px;
 }
 
-/* optional class for removing the outline */
 .prism-editor__textarea:focus {
   outline: none;
 }
