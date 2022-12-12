@@ -47,7 +47,7 @@ $ lait '/#\\w{5} \\w+ \\d+/; { print($[2], $[1]) }' demo_input
             like syntax highlighting!), you can pass the <span class="code-span">-f</span> flag, for example,
         </p><br />
 
-        <textarea cols="60" rows="1" disabled>lait -f demo.lait.ts demo_input</textarea>.<br />
+        <textarea cols="60" rows="1" disabled>lait -f demo.lait.ts demo_input</textarea><br />
 
         <LaitPlayground
             :default-script-input="scriptInput2"
