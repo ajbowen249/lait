@@ -2,6 +2,9 @@
 <!-- #targets md,html -->
 # lait; an AWK-inspired TypeScript Command-Line Utility
 
+[_GitHub_](https://github.com/ajbowen249/lait),
+[_NPM_](https://www.npmjs.com/package/@ajbowen249/lait)
+
 <!-- #targets md -->
 > Check out the interactive version of these docs [here](https://ajbowen249.github.io/lait/)!
 <!-- #targets md,html -->
@@ -25,7 +28,21 @@ $ lait '/#\w{5} \w+ \d+/; { print($[2], $[1]) }' demo_input
 ```
 <!-- #targets html -->
 Here is an interactive version of that example. Both the input "file" and script are editable. Give it a try!
-TODO: Playground
+
+```none
+<!-- #playground-input 0 -->
+OrderId Item Quantity
+#a2fr5 Socks 16
+#d8j38 Avocado 2
+#8fh39 Shampoo 1
+#qb6ag Candle 3
+```
+
+```typescript
+<!-- #playground-script 0 -->
+/#\w{5} \w+ \d+/; { print($[2], $[1]) }
+```
+
 <!-- #targets md,html -->
 
 A `lait` program is just a `TypeScript` script. However, `lait` picks it apart and puts it into a wrapper program, where
@@ -35,8 +52,23 @@ the first handler will be run before scanning input, and all code after the firs
 processing input. Note that this means there is no need for an explicit `BEGIN` or `END` block like in `awk`.
 
 Let's take a look at a more complicated `lait` script. Like `awk`, `lait` can take a file as its script input:
+<!-- #targets html -->
+```shell
+$lait -f demo.lait.ts demo_input
+```
+
+```none
+<!-- #playground-input 1 -->
+OrderId Item Quantity
+#a2fr5 Socks 16
+#d8j38 Avocado 2
+#8fh39 Shampoo 1
+#qb6ag Candle 3
+```
+<!-- #targets md,html -->
 
 ```typescript
+<!-- #playground-script 1 -->
 interface Order {
     id: string;
     item: string;
@@ -74,6 +106,7 @@ print('Order ID starts with digit:');
 print(digitOrders.map(toTable).join('\n'));
 ```
 
+<!-- #targets md -->
 ```shell
 $ lait -f demo.lait.ts demo_input
 Order ID starts with letter:
@@ -83,6 +116,7 @@ Order ID starts with letter:
 Order ID starts with digit:
 #8fh39: 1 Shampoo
 ```
+<!-- #targets md,html -->
 
 Note that programs of this size are less common. Like `awk`, `lait` programs are meant to be small and integrated into
 shell operations.
@@ -91,6 +125,20 @@ The first input given to handlers is `$`, the array of "fields" on the line. Unl
 based array of fields, and there is not a "complete line" entry in `$`. Like `awk`, the default field separator is
 space, and it can be overridden via the `FS` global:
 
+<!-- #targets html-->
+```shell
+<!-- #playground-input 2 -->
+Name,Age,ID
+Carol,25,2lf8ah
+Bob,21,j8efy3g
+Jesse,34,j8fhiuad8
+```
+
+```typescript
+<!-- #playground-script 2 -->
+FS=`,`; { print($[0], `#${$[2]}`); }
+```
+<!-- #targets md-->
 ```shell
 $ cat demo.csv
 Name,Age,ID
@@ -104,10 +152,26 @@ Carol #2lf8ah
 Bob #j8efy3g
 Jesse #j8fhiuad8
 ```
+<!-- #targets md,html-->
 
 In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from when it was compared to the regex, as
 well as `g`, the (possibly undefined) set of capture groups, aka `m.groups`:
 
+<!-- #targets html-->
+```shell
+<!-- #playground-input 3 -->
+OrderId Item Quantity
+#a2fr5 Socks 16
+#d8j38 Avocado 2
+#8fh39 Shampoo 1
+#qb6ag Candle 3
+```
+
+```typescript
+<!-- #playground-script 3 -->
+/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }
+```
+<!-- #targets md-->
 ```shell
 lait '/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }' demo_input
 16 Socks #a2fr5 Socks 16
@@ -115,6 +179,7 @@ lait '/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }
 1 Shampoo #8fh39 Shampoo 1
 3 Candle #qb6ag Candle 3
 ```
+<!-- #targets md,html-->
 
 `lait` can also accept input from standard in:
 
@@ -140,6 +205,20 @@ demo_input (87 bytes)
 In addition to `FS`, there is also `TRIM_EMPTY`, which is `true` by default as is usually convenient for processing
 space-aligned data like in the `ls` example. That's less useful when processing CSVs:
 
+<!-- #targets html-->
+```shell
+<!-- #playground-input 4 -->
+Name,Favorite Film (Optional),Score
+Cathy Smith,A Fistful of Dollars,78
+Paulo Henry MacMasterson III,Finding Nemo,4
+Bob Nofunpants,,4
+```
+
+```typescript
+<!-- #playground-script 4 -->
+FS=`,`;TRIM_EMPTY=false; { print($[0], $[1] || `does not like movies :(`)  }
+```
+<!-- #targets md-->
 ```shell
 $ cat demo2.csv
 Name,Favorite Film (Optional),Score
@@ -153,6 +232,7 @@ Cathy Smith A Fistful of Dollars
 Paulo Henry MacMasterson III Finding Nemo
 Bob Nofunpants does not like movies :(
 ```
+<!-- #targets md,html-->
 
 Without `TRIM_EMPTY=false;`, the last line of that would have been:
 ```shell
