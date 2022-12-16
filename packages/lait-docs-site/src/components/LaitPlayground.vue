@@ -30,7 +30,7 @@
     <button @click="run">Run</button>
     <button @click="() => consoleOutput = ''">Clear</button>
     <br />
-    <textarea v-model="consoleOutput" id="output" cols="80" rows="10" disabled /><br />
+    <pre><code class="language-shell">{{ consoleOutput }}</code></pre>
 </template>
 
 <script setup lang="ts">

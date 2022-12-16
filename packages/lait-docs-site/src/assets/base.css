@@ -50,7 +50,7 @@
   font-weight: normal;
 }
 
-.code-span {
+code {
   font-family: monospace;
   color: var(--color-purple-mute);
 }
@@ -86,13 +86,14 @@ label {
   line-height: 2.5rem;
 }
 
-textarea {
+textarea, pre {
   background-color: var(--color-mocha-dark);
   color: var(--color-white-mute);
   border: 1px solid var(--color-white-mute);
   border-radius: 8px;
   height: auto;
   width: 100%;
+  padding: 15px;
 }
 
 a {
