@@ -9,21 +9,30 @@ interface RegexPair {
     block: ts.Statement;
 }
 
-export async function transpile(inputScript: string, inputFilePath: string, templateFile: string): Promise<string> {
-    const ast = ts.createSourceFile('temp.ts', inputScript, ts.ScriptTarget.ES2022);
+export interface ParseResult {
+    sourceFile: ts.SourceFile;
+    regexBlockPairs: RegexPair[];
+    importStatements: ts.Statement[];
+    initStatements: ts.Statement[];
+    endStatements: ts.Statement[];
+    defaultBlock?: ts.Statement;
+}
+
+export function parse(inputScript: string) {
+    const sourceFile = ts.createSourceFile('temp.ts', inputScript, ts.ScriptTarget.ES2022);
     const regexBlockPairs: RegexPair[] = [];
     const importStatements: ts.Statement[] = [];
     const initStatements: ts.Statement[] = [];
     const endStatements: ts.Statement[] = [];
     let defaultBlock: ts.Statement | undefined;
 
-    for (let i = 0; i < ast.statements.length; i++) {
-        const current = ast.statements[i];
+    for (let i = 0; i < sourceFile.statements.length; i++) {
+        const current = sourceFile.statements[i];
         if ((current as any).wasParsed) {
             continue;
         }
 
-        const next = i < ast.statements.length - 1 ? ast.statements[i + 1] : undefined;
+        const next = i < sourceFile.statements.length - 1 ? sourceFile.statements[i + 1] : undefined;
         if (
             next &&
             current.kind === ts.SyntaxKind.ExpressionStatement &&
@@ -48,15 +57,35 @@ export async function transpile(inputScript: string, inputFilePath: string, temp
         }
     }
 
+    return {
+        sourceFile,
+        regexBlockPairs,
+        importStatements,
+        initStatements,
+        endStatements,
+        defaultBlock,
+    };
+}
+
+export function transpile(inputScript: string, inputFilePath: string, templateFile: string): string {
+    const {
+        sourceFile,
+        regexBlockPairs,
+        importStatements,
+        initStatements,
+        endStatements,
+        defaultBlock,
+    } = parse(inputScript);
+
     let outputString = templateFile;
     outputString = outputString.replace(
         '// IMPORT_STATEMENTS',
-        importStatements.map(x => x.getText(ast)).join('\n'),
+        importStatements.map(x => x.getText(sourceFile)).join('\n'),
     );
 
     outputString = outputString.replace(
         '// INIT_STATEMENTS',
-        initStatements.map(x => x.getText(ast)).join('\n'),
+        initStatements.map(x => x.getText(sourceFile)).join('\n'),
     );
 
     outputString = outputString.replace(
@@ -67,21 +96,21 @@ export async function transpile(inputScript: string, inputFilePath: string, temp
     outputString = outputString.replace(
         '// HANDLERS',
         regexBlockPairs.map(pair => {
-            const reText = pair.regex.getText(ast);
-            return `{ regex: ${reText.substring(0, reText.length - 1)}, handler: async ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => ${ pair.block.getText(ast)} }`;
+            const reText = pair.regex.getText(sourceFile);
+            return `{ regex: ${reText.substring(0, reText.length - 1)}, handler: async ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => ${ pair.block.getText(sourceFile)} }`;
         }).join(',\n'),
     );
 
     if (defaultBlock) {
         outputString = outputString.replace(
             '// DEFAULT_HANDLER',
-            `${defaultBlock.getText(ast)}`,
+            `${defaultBlock.getText(sourceFile)}`,
         );
     }
 
     outputString = outputString.replace(
         '// END_STATEMENTS',
-        endStatements.map(x => x.getText(ast)).join('\n'),
+        endStatements.map(x => x.getText(sourceFile)).join('\n'),
     );
 
     return outputString;

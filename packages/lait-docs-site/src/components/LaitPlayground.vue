@@ -69,17 +69,16 @@ function getScriptTemplate() {
 }
 
 function run() {
-    t.transpile(scriptInput.value, '', getScriptTemplate()).then(x => {
-        const js = ts.transpile(x);
-        const consoleLog = console.log;
-        console.log = (...data: any[]) => {
-            consoleLog.bind(console)(...data);
-            consoleOutput.value += data.map(x => x.toString()).join(' ');
-            consoleOutput.value += '\n';
-        };
-        eval(js);
-        console.log = consoleLog;
-    });
+    const fullProgram = t.transpile(scriptInput.value, '', getScriptTemplate());
+    const js = ts.transpile(fullProgram);
+    const consoleLog = console.log;
+    console.log = (...data: any[]) => {
+        consoleLog.bind(console)(...data);
+        consoleOutput.value += data.map(x => x.toString()).join(' ');
+        consoleOutput.value += '\n';
+    };
+    eval(js);
+    console.log = consoleLog;
 }
 
 onMounted(() => {

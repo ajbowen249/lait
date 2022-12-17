@@ -72,7 +72,7 @@ async function main() {
         cwd: process.cwd(),
     });
 
-    const transpiledScript = await transpile(inputScript, filePath, templateFile);
+    const transpiledScript = transpile(inputScript, filePath, templateFile);
 
     if (args.named.transpileOnly) {
         console.log(transpiledScript);
