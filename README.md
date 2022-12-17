@@ -1,4 +1,3 @@
-<!-- WARNING: File is auto-generated. Edit docs-generator/docs.md instead -->
 # lait; an AWK-inspired TypeScript Command-Line Utility
 
 [_GitHub_](https://github.com/ajbowen249/lait),

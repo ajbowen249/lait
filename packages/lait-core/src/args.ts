@@ -1,5 +1,3 @@
-import { exit } from "process";
-
 export interface ParsedArgs {
     named: { [index: string]: string|number|boolean|undefined };
     positional: string[];
@@ -27,10 +25,10 @@ export function describe(schema: ArgSchema) {
     }
 }
 
-export function getArgs(schema: ArgSchema) {
+export function getArgs(processArgs: string[], schema: ArgSchema) {
     const args: ParsedArgs = { named: {}, positional: [] };
     // First pull out non-positional args
-    const rawArgs: (string|undefined)[] = process.argv.slice(2);
+    const rawArgs: (string|undefined)[] = processArgs.slice(2);
     for (let i = 0; i < rawArgs.length; i++) {
         const arg = rawArgs[i];
         if (!arg) {
@@ -65,8 +63,7 @@ export function getArgs(schema: ArgSchema) {
                     rawArgs[i] = undefined;
                 } else {
                     if (i === rawArgs.length - 1 ) {
-                        console.error(`Missing value for flag ${argName}`);
-                        exit(-1);
+                        throw new Error(`Missing value for flag ${argName}`);
                     } else {
                         const value = rawArgs[i + 1]!;
                         args.named[argName] = getValue(argName, value);

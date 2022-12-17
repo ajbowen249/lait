@@ -1,45 +1,12 @@
 #!/usr/bin/env node
 import * as fs from 'fs/promises';
-import * as tsNode from 'ts-node';
-import { transpile } from './transpiler';
 import { exit } from 'process';
-import { getArgs, ArgSchema, describe } from './args';
-
-const argsSchema: ArgSchema = {
-    aliases: { t: 'transpileOnly', f: 'file', h: 'help' },
-    named: {
-        transpileOnly: {
-            description: 'Only print transpiled file and exit. Do not execute.',
-            isFlag: true,
-            parseAs: 'boolean',
-        },
-        file: {
-            description: 'Open script file in lieu of passing a positional arg',
-        },
-        help: {
-            description: 'Print help text and exit.',
-            isFlag: true,
-            parseAs: 'boolean',
-        },
-    },
-    positional: [
-        { name: 'script' },
-        { name: 'input' },
-    ],
-};
-
-interface AppArgs {
-    named: {
-        transpileOnly?: boolean;
-        file?: string;
-        help?: boolean;
-    },
-    positional: string[],
-}
+import { AppArgs, argsSchema } from './appArgs';
+import { getArgs, describe } from './args';
+import { run } from './runner';
 
 async function main() {
-    const args = getArgs(argsSchema) as AppArgs;
-    const templateFile = (await fs.readFile([__dirname, '../programTemplate.ts'].join('/'))).toString();
+    const args = getArgs(process.argv, argsSchema) as AppArgs;
 
     if (args.named.help) {
         describe(argsSchema);
@@ -57,30 +24,13 @@ async function main() {
 
     if (!inputScript) {
         console.log('Input script required');
+        describe(argsSchema);
         exit(-1);
     }
 
     const filePath = args.positional[inputFileNameIndex] || '';
 
-    const service = tsNode.create({
-        compilerOptions: {
-            module: 'CommonJS',
-            moduleResolution: 'node16',
-            esModuleInterop: true,
-        },
-        transpileOnly: true,
-        cwd: process.cwd(),
-    });
-
-    const transpiledScript = await transpile(inputScript, filePath, templateFile);
-
-    if (args.named.transpileOnly) {
-        console.log(transpiledScript);
-        return;
-    }
-
-    const compiledScript = service.compile(transpiledScript, 'generated.ts');
-    eval(compiledScript);
+    await run(inputScript, filePath, args.named.transpileOnly);
 }
 
 if (require.main === module) {

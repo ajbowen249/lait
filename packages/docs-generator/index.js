@@ -33,8 +33,7 @@ async function main() {
         }
     }
 
-    const readmeFile = '<!-- WARNING: File is auto-generated. Edit docs-generator/docs.md instead -->\n' +
-        targets.md
+    const readmeFile = targets.md
         // We don't yank these lines in the initial parse so we can find them later
         .filter(x => !x.match(playgroundTagRegex))
         .join('\n')

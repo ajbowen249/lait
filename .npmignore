@@ -1,5 +1,5 @@
 node_modules/
 .vscode/
 demo/
-lait-docs-site/
-docs-generator/
+packages/lait-docs-site/
+packages/docs-generator/
