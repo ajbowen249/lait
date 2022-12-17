@@ -15,6 +15,10 @@ print('total', x);
 const testTemplate = `
 // IMPORT_STATEMENTS
 
+// HANDLER_ARGS_LIST
+
+// LINE_PROCESS_FUNC
+
 // INIT_STATEMENTS
 
 INPUT_FILEPATH
@@ -57,6 +61,33 @@ describe('transpiler', () => {
         it('can transpile a basic script', () => {
             const result = transpile(basicScript, 'TEST_FILE', testTemplate);
             const expectedScript = `
+
+
+$: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']
+
+
+const processLine = async (line: string) => {
+    let handled = false;
+    let fields = line.split(FS);
+    if (TRIM_EMPTY) {
+        fields = fields.filter(x => x !== '');
+    }
+
+    for (const handler of LAIT_PROGRAM_HANDLERS) {
+        const match = line.match(handler.regex);
+        if (match) {
+            await handler.handler(
+                fields, match, match.groups
+            );
+            handled = true;
+            break;
+        }
+    }
+
+    if (!handled) {
+        await LAIT_DEFAULT_HANDLER(fields);
+    }
+};
 
 
 let x = 0;

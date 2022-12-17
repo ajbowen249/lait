@@ -25,6 +25,51 @@ export class MultipleDefaultHandlersError extends Error {
     }
 }
 
+interface HandlerArg {
+    type: string;
+    scopeName: string;
+    isOptional?: boolean;
+}
+
+const handlerArgs: { [index: string]: HandlerArg } = {
+    $: { type: 'string[]', scopeName: 'fields' },
+    m: { type: 'RegExpMatchArray', scopeName: 'match' },
+    g: { type: `RegExpMatchArray['groups']`, scopeName: 'match.groups', isOptional: true, },
+};
+
+const handlerArgsList = Object.keys(handlerArgs).map(x => ({ key: x, arg: handlerArgs[x] }))
+    .map(x => `${x.key}${x.arg.isOptional ? '?' : ''}: ${x.arg.type}`)
+    .join(', ');
+
+const handlerScopeArgs = Object.keys(handlerArgs).map(x => ({ key: x, arg: handlerArgs[x] }))
+    .map(x => x.arg.scopeName)
+    .join(', ');
+
+const lineProcessFunc = `
+const processLine = async (line: string) => {
+    let handled = false;
+    let fields = line.split(FS);
+    if (TRIM_EMPTY) {
+        fields = fields.filter(x => x !== '');
+    }
+
+    for (const handler of LAIT_PROGRAM_HANDLERS) {
+        const match = line.match(handler.regex);
+        if (match) {
+            await handler.handler(
+                ${handlerScopeArgs}
+            );
+            handled = true;
+            break;
+        }
+    }
+
+    if (!handled) {
+        await LAIT_DEFAULT_HANDLER(fields);
+    }
+};
+`;
+
 export function parse(inputScript: string) {
     const sourceFile = ts.createSourceFile('temp.ts', inputScript, ts.ScriptTarget.ES2022);
     const regexBlockPairs: RegexPair[] = [];
@@ -88,6 +133,17 @@ export function transpile(inputScript: string, inputFilePath: string, templateFi
     } = parse(inputScript);
 
     let outputString = templateFile;
+
+    outputString = outputString.replace(
+        '// HANDLER_ARGS_LIST',
+        handlerArgsList,
+    );
+
+    outputString = outputString.replace(
+        '// LINE_PROCESS_FUNC',
+        lineProcessFunc,
+    );
+
     outputString = outputString.replace(
         '// IMPORT_STATEMENTS',
         importStatements.map(x => x.getText(sourceFile)).join('\n'),
@@ -107,7 +163,9 @@ export function transpile(inputScript: string, inputFilePath: string, templateFi
         '// HANDLERS',
         regexBlockPairs.map(pair => {
             const reText = pair.regex.getText(sourceFile);
-            return `{ regex: ${reText.substring(0, reText.length - 1)}, handler: async ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => ${ pair.block.getText(sourceFile)} }`;
+            const regex = reText.substring(0, reText.length - 1);
+            const blockSource = pair.block.getText(sourceFile);
+            return `{ regex: ${regex}, handler: async (${handlerArgsList}) => ${blockSource} }`;
         }).join(',\n'),
     );
 

@@ -14,7 +14,9 @@ async function getInputFileLines() {
     return (await fs.readFile(INPUT_FILE)).toString().split('\n');
 }
 
-type HandlerFunc = ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => Promise<void>;
+type HandlerFunc = (
+    // HANDLER_ARGS_LIST
+) => Promise<void>;
 
 interface Handler {
     regex: RegExp;
@@ -32,26 +34,7 @@ async function main() {
         // DEFAULT_HANDLER
     };
 
-    const processLine = async (line: string) => {
-        let handled = false;
-        let fields = line.split(FS);
-        if (TRIM_EMPTY) {
-            fields = fields.filter(x => x !== '');
-        }
-
-        for (const handler of LAIT_PROGRAM_HANDLERS) {
-            const match = line.match(handler.regex);
-            if (match) {
-                await handler.handler(fields, match, match.groups);
-                handled = true;
-                break;
-            }
-        }
-
-        if (!handled) {
-            await LAIT_DEFAULT_HANDLER(fields);
-        }
-    };
+    // LINE_PROCESS_FUNC
 
     if (INPUT_FILE !== '') {
         const LAIT_PROGRAM_INPUT_LINES = await getInputFileLines();
