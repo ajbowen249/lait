@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 import * as fs from 'fs/promises';
-import * as tsNode from 'ts-node';
-import { transpile } from './transpiler';
 import { exit } from 'process';
 import { getArgs, ArgSchema, describe } from './args';
+import { run } from './runner';
 
 const argsSchema: ArgSchema = {
     aliases: { t: 'transpileOnly', f: 'file', h: 'help' },
@@ -39,7 +38,6 @@ interface AppArgs {
 
 async function main() {
     const args = getArgs(argsSchema) as AppArgs;
-    const templateFile = (await fs.readFile([__dirname, '../programTemplate.ts'].join('/'))).toString();
 
     if (args.named.help) {
         describe(argsSchema);
@@ -57,30 +55,13 @@ async function main() {
 
     if (!inputScript) {
         console.log('Input script required');
+        describe(argsSchema);
         exit(-1);
     }
 
     const filePath = args.positional[inputFileNameIndex] || '';
 
-    const service = tsNode.create({
-        compilerOptions: {
-            module: 'CommonJS',
-            moduleResolution: 'node16',
-            esModuleInterop: true,
-        },
-        transpileOnly: true,
-        cwd: process.cwd(),
-    });
-
-    const transpiledScript = transpile(inputScript, filePath, templateFile);
-
-    if (args.named.transpileOnly) {
-        console.log(transpiledScript);
-        return;
-    }
-
-    const compiledScript = service.compile(transpiledScript, 'generated.ts');
-    eval(compiledScript);
+    await run(inputScript, filePath, args.named.transpileOnly);
 }
 
 if (require.main === module) {
