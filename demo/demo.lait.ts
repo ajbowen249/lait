@@ -7,20 +7,20 @@ interface Order {
 const letterOrders: Order[] = [];
 const digitOrders: Order[] = [];
 
-function parseOrder($: string[]) {
+function parseOrder(g: RegExpMatchArray['groups']) {
     return {
-        id: $[0],
-        item: $[1],
-        quantity: parseInt($[2]),
+        id: g.id,
+        item: g.item,
+        quantity: parseInt(g.q),
     };
 }
 
-/[a-z]\w{4} \w+ \d+/; {
-    letterOrders.push(parseOrder($));
+/(?<id>[a-z]\w{4}) (?<item>\w+) (?<q>\d+)/; {
+    letterOrders.push(parseOrder(g));
 }
 
-/\d\w{4} \w+ \d+/; {
-    digitOrders.push(parseOrder($));
+/(?<id>\d\w{4}) (?<item>\w+) (?<q>\d+)/; {
+    digitOrders.push(parseOrder(g));
 }
 
 function toTable(order: Order) {
@@ -28,5 +28,8 @@ function toTable(order: Order) {
 }
 
 // Note: print is just an alias of console.log
-print('Order ID starts with letter:\n', letterOrders.map(toTable).join('\n'));
-print('Order ID starts with digit:\n', digitOrders.map(toTable).join('\n'));
+print('Order ID starts with letter:');
+print(letterOrders.map(toTable).join('\n'));
+
+print('Order ID starts with digit:');
+print(digitOrders.map(toTable).join('\n'));

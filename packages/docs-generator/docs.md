@@ -20,7 +20,7 @@ OrderId Item Quantity
 #d8j38 Avocado 2
 #8fh39 Shampoo 1
 #qb6ag Candle 3
-$ lait '/#\w{5} \w+ \d+/; { print($[2], $[1]) }' demo_input
+$ lait '/#\w{5} (?<name>\w+) (?<quantity>\d+)/; { print(g.name, g.q) }' demo_input
 16 Socks
 2 Avocado
 1 Shampoo
@@ -40,7 +40,7 @@ OrderId Item Quantity
 
 ```typescript
 <!-- #playground-script 0 -->
-/#\w{5} \w+ \d+/; { print($[2], $[1]) }
+/#\w{5} (?<name>\w+) (?<q>\d+)/; { print(g.name, g.q) }
 ```
 
 <!-- #targets md,html -->
@@ -78,20 +78,20 @@ interface Order {
 const letterOrders: Order[] = [];
 const digitOrders: Order[] = [];
 
-function parseOrder($: string[]) {
+function parseOrder(g: RegExpMatchArray['groups']) {
     return {
-        id: $[0],
-        item: $[1],
-        quantity: parseInt($[2]),
+        id: g.id,
+        item: g.item,
+        quantity: parseInt(g.q),
     };
 }
 
-/[a-z]\w{4} \w+ \d+/; {
-    letterOrders.push(parseOrder($));
+/(?<id>[a-z]\w{4}) (?<item>\w+) (?<q>\d+)/; {
+    letterOrders.push(parseOrder(g));
 }
 
-/\d\w{4} \w+ \d+/; {
-    digitOrders.push(parseOrder($));
+/(?<id>\d\w{4}) (?<item>\w+) (?<q>\d+)/; {
+    digitOrders.push(parseOrder(g));
 }
 
 function toTable(order: Order) {
@@ -154,8 +154,11 @@ Jesse #j8fhiuad8
 ```
 <!-- #targets md,html-->
 
-In addition to `$`, the handlers are also given `m`, the `RegExpMatchArray` from when it was compared to the regex, as
-well as `g`, the (possibly undefined) set of capture groups, aka `m.groups`:
+The complete list of args given to matchers is:
+- `$`: The set of `awk`-style fields
+- `$_`: The complete matched line
+- `m`: The `RegExpMatchArray` from matching the line
+- `g`: `m.groups` (possibly undefined!)
 
 <!-- #targets html-->
 ```shell
@@ -169,15 +172,15 @@ OrderId Item Quantity
 
 ```typescript
 <!-- #playground-script 3 -->
-/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }
+/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print($, $_, JSON.stringify(m), JSON.stringify(g)) }
 ```
 <!-- #targets md-->
 ```shell
-lait '/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print(g.amnt, g.name, m[0]) }' demo_input
-16 Socks #a2fr5 Socks 16
-2 Avocado #d8j38 Avocado 2
-1 Shampoo #8fh39 Shampoo 1
-3 Candle #qb6ag Candle 3
+lait '/(?<id>#\w{5}) (?<name>\w+) (?<amnt>\d+)/; { print($, $_, JSON.stringify(m), JSON.stringify(g)) }' demo_input
+#a2fr5,Socks,16 #a2fr5 Socks 16 ["#a2fr5 Socks 16","#a2fr5","Socks","16"] {"id":"#a2fr5","name":"Socks","amnt":"16"}
+#d8j38,Avocado,2 #d8j38 Avocado 2 ["#d8j38 Avocado 2","#d8j38","Avocado","2"] {"id":"#d8j38","name":"Avocado","amnt":"2"}
+#8fh39,Shampoo,1 #8fh39 Shampoo 1 ["#8fh39 Shampoo 1","#8fh39","Shampoo","1"] {"id":"#8fh39","name":"Shampoo","amnt":"1"}
+#qb6ag,Candle,3 #qb6ag Candle 3 ["#qb6ag Candle 3","#qb6ag","Candle","3"] {"id":"#qb6ag","name":"Candle","amnt":"3"}
 ```
 <!-- #targets md,html-->
 
