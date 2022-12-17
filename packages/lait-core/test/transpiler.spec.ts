@@ -17,6 +17,8 @@ const testTemplate = `
 
 // HANDLER_ARGS_LIST
 
+// DEFAULT_HANDLER_ARGS_LIST
+
 // LINE_PROCESS_FUNC
 
 // INIT_STATEMENTS
@@ -65,6 +67,8 @@ describe('transpiler', () => {
 
 $: string[], $_: string, m: RegExpMatchArray, g?: RegExpMatchArray['groups']
 
+$: string[], $_: string
+
 
 const processLine = async (line: string) => {
     let handled = false;
@@ -85,7 +89,9 @@ const processLine = async (line: string) => {
     }
 
     if (!handled) {
-        await LAIT_DEFAULT_HANDLER(fields);
+        await LAIT_DEFAULT_HANDLER(
+            fields, line
+        );
     }
 };
 
