@@ -63,7 +63,7 @@ describe('transpiler', () => {
             const expectedScript = `
 
 
-$: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']
+$: string[], $_: string, m: RegExpMatchArray, g?: RegExpMatchArray['groups']
 
 
 const processLine = async (line: string) => {
@@ -77,7 +77,7 @@ const processLine = async (line: string) => {
         const match = line.match(handler.regex);
         if (match) {
             await handler.handler(
-                fields, match, match.groups
+                fields, line, match, match.groups
             );
             handled = true;
             break;
@@ -94,7 +94,7 @@ let x = 0;
 
 TEST_FILE
 
-{ regex: /(?<amount>d+)/, handler: async ($: string[], m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => {
+{ regex: /(?<amount>d+)/, handler: async ($: string[], $_: string, m: RegExpMatchArray, g?: RegExpMatchArray['groups']) => {
     x += g.amount;
 } }
 

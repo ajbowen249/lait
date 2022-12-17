@@ -33,6 +33,7 @@ interface HandlerArg {
 
 const handlerArgs: { [index: string]: HandlerArg } = {
     $: { type: 'string[]', scopeName: 'fields' },
+    $_: { type: 'string', scopeName: 'line' },
     m: { type: 'RegExpMatchArray', scopeName: 'match' },
     g: { type: `RegExpMatchArray['groups']`, scopeName: 'match.groups', isOptional: true, },
 };
