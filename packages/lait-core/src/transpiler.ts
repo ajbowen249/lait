@@ -18,6 +18,13 @@ export interface ParseResult {
     defaultBlock?: ts.Statement;
 }
 
+export class ParseError extends Error {}
+export class MultipleDefaultHandlersError extends Error {
+    constructor(start1: number, start2: number) {
+        super(`Cannot have more than one default handler (first at ${start1}, second at ${start2})`)
+    }
+}
+
 export function parse(inputScript: string) {
     const sourceFile = ts.createSourceFile('temp.ts', inputScript, ts.ScriptTarget.ES2022);
     const regexBlockPairs: RegexPair[] = [];
@@ -49,6 +56,9 @@ export function parse(inputScript: string) {
         } else if (current.kind === ts.SyntaxKind.ImportDeclaration) {
             importStatements.push(current);
         } else if (current.kind === ts.SyntaxKind.Block) {
+            if (!!defaultBlock) {
+                throw new MultipleDefaultHandlersError(defaultBlock.pos, current.pos);
+            }
             defaultBlock = current;
         } else if (regexBlockPairs.length === 0 && !defaultBlock) {
             initStatements.push(current);

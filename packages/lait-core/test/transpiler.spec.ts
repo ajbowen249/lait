@@ -1,4 +1,4 @@
-import { parse, transpile, ParseResult } from '../src/transpiler';
+import { parse, transpile, MultipleDefaultHandlersError } from '../src/transpiler';
 
 const basicScript = `let x = 0;
 /(?<amount>\d+)/; {
@@ -36,6 +36,20 @@ describe('transpiler', () => {
             expect(result.initStatements.length).toBe(1);
             expect(result.regexBlockPairs.length).toBe(1);
             expect(result.endStatements.length).toBe(1);
+        });
+
+        it('puts all floating statements after the first handler at the end', () => {
+            const result = parse(`print(); /a/;{} print(); /b/;{} print();`);
+
+            expect(result.defaultBlock).toBeUndefined();
+            expect(result.importStatements.length).toBe(0);
+            expect(result.initStatements.length).toBe(1);
+            expect(result.regexBlockPairs.length).toBe(2);
+            expect(result.endStatements.length).toBe(2);
+        });
+
+        it('rejects a program with multiple default handlers', () => {
+            expect(() => parse(`{} {}`)).toThrow(new MultipleDefaultHandlersError(0, 2));
         });
     });
 
