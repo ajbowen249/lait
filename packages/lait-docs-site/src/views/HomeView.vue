@@ -13,7 +13,7 @@ OrderId Item Quantity
 #d8j38 Avocado 2
 #8fh39 Shampoo 1
 #qb6ag Candle 3
-$ lait '/#\w{5} \w+ \d+/; { print($[2], $[1]) }' demo_input
+$ lait '/#\w{5} (?&lt;name&gt;\w+) (?&lt;quantity&gt;\d+)/; { print(g.name, g.q) }' demo_input
 16 Socks
 2 Avocado
 1 Shampoo
@@ -48,8 +48,13 @@ space, and it can be overridden via the <code>FS</code> global:</p>
     :default-script-input="scriptInput2"
     :default-file-input="fileInput2"
 /><br />
-<p>In addition to <code>$</code>, the handlers are also given <code>m</code>, the <code>RegExpMatchArray</code> from when it was compared to the regex, as
-well as <code>g</code>, the (possibly undefined) set of capture groups, aka <code>m.groups</code>:</p>
+<p>The complete list of args given to matchers is:</p>
+<ul>
+<li><code>$</code>: The set of <code>awk</code>-style fields</li>
+<li><code>$_</code>: The complete matched line</li>
+<li><code>m</code>: The <code>RegExpMatchArray</code> from matching the line</li>
+<li><code>g</code>: <code>m.groups</code> (possibly undefined!)</li>
+</ul>
 
 <LaitPlayground
     :default-script-input="scriptInput3"
@@ -134,7 +139,7 @@ Cathy Smith,A Fistful of Dollars,78
 Paulo Henry MacMasterson III,Finding Nemo,4
 Bob Nofunpants,,4`);
 
-const scriptInput0 = ref(`/#\\w{5} \\w+ \\d+/; { print(\$[2], \$[1]) }`);
+const scriptInput0 = ref(`/#\\w{5} (?<name>\\w+) (?<q>\\d+)/; { print(g.name, g.q) }`);
 const scriptInput1 = ref(`interface Order {
     id: string;
     item: string;
@@ -144,20 +149,20 @@ const scriptInput1 = ref(`interface Order {
 const letterOrders: Order[] = [];
 const digitOrders: Order[] = [];
 
-function parseOrder(\$: string[]) {
+function parseOrder(g: RegExpMatchArray['groups']) {
     return {
-        id: \$[0],
-        item: \$[1],
-        quantity: parseInt(\$[2]),
+        id: g.id,
+        item: g.item,
+        quantity: parseInt(g.q),
     };
 }
 
-/[a-z]\\w{4} \\w+ \\d+/; {
-    letterOrders.push(parseOrder(\$));
+/(?<id>[a-z]\\w{4}) (?<item>\\w+) (?<q>\\d+)/; {
+    letterOrders.push(parseOrder(g));
 }
 
-/\\d\\w{4} \\w+ \\d+/; {
-    digitOrders.push(parseOrder(\$));
+/(?<id>\\d\\w{4}) (?<item>\\w+) (?<q>\\d+)/; {
+    digitOrders.push(parseOrder(g));
 }
 
 function toTable(order: Order) {
@@ -171,7 +176,7 @@ print(letterOrders.map(toTable).join('\\n'));
 print('Order ID starts with digit:');
 print(digitOrders.map(toTable).join('\\n'));`);
 const scriptInput2 = ref(`FS=\`,\`; { print(\$[0], \`#\${\$[2]}\`); }`);
-const scriptInput3 = ref(`/(?<id>#\\w{5}) (?<name>\\w+) (?<amnt>\\d+)/; { print(g.amnt, g.name, m[0]) }`);
+const scriptInput3 = ref(`/(?<id>#\\w{5}) (?<name>\\w+) (?<amnt>\\d+)/; { print(\$, \$_, JSON.stringify(m), JSON.stringify(g)) }`);
 const scriptInput4 = ref(`FS=\`,\`;TRIM_EMPTY=false; { print(\$[0], \$[1] || \`does not like movies :(\`)  }`);
 
 </script>
