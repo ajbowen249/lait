@@ -59,7 +59,7 @@ describe('args', () => {
             '--testNum=15',
         ], schema) as TestArgs;
 
-        expect(result.named.testNum).toBe(75);
+        expect(result.named.testNum).toBe(15);
         expect(result.named.testStr).toBe('val');
     });
 
