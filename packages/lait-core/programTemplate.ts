@@ -1,4 +1,4 @@
-import * as fs from 'fs/promises';
+import * as fs from 'fs';
 import * as readline from 'readline';
 // IMPORT_STATEMENTS
 
@@ -9,10 +9,6 @@ let INPUT_FILE = 'INPUT_FILEPATH';
 
 // for convenience
 const print = console.log.bind(console);
-
-async function getInputFileLines() {
-    return (await fs.readFile(INPUT_FILE)).toString().split('\n');
-}
 
 type HandlerFunc = (
     // HANDLER_ARGS_LIST
@@ -38,32 +34,28 @@ async function main() {
 
     // LINE_PROCESS_FUNC
 
-    if (INPUT_FILE !== '') {
-        const LAIT_PROGRAM_INPUT_LINES = await getInputFileLines();
-        for (const line of LAIT_PROGRAM_INPUT_LINES) {
-            processLine(line);
-        }
-    } else {
-        await new Promise<void>((resolve, reject) => {
-            const rl = readline.createInterface({
-                input: process.stdin,
-                output: process.stdout,
-                terminal: false,
-            });
-
-            rl.on('line', (line) => {
-                processLine(line);
-            });
-
-            rl.once('close', () => {
-                resolve();
-            });
-
-            rl.on('SIGINT', () => {
-                resolve();
-            });
+    await new Promise<void>((resolve) => {
+        const rl = readline.createInterface(INPUT_FILE !== '' ? {
+            input: fs.createReadStream(INPUT_FILE),
+            crlfDelay: Infinity
+        } : {
+            input: process.stdin,
+            output: process.stdout,
+            terminal: false,
         });
-    }
+
+        rl.on('line', (line) => {
+            processLine(line);
+        });
+
+        rl.once('close', () => {
+            resolve();
+        });
+
+        rl.on('SIGINT', () => {
+            resolve();
+        });
+    });
 
     // END_STATEMENTS
 }
