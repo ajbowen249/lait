@@ -36,7 +36,7 @@ async function main() {
 
     const filePath = args.positional[inputFileNameIndex] || '';
 
-    await run(inputScript, filePath, args.named.transpileOnly);
+    await run(inputScript, filePath, args.named.define, args.named.transpileOnly);
 }
 
 if (require.main === module) {

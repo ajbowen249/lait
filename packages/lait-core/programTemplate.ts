@@ -7,6 +7,8 @@ let TRIM_EMPTY = true;
 
 let INPUT_FILE = 'INPUT_FILEPATH';
 
+// CONSTANT_DEFINITIONS
+
 // for convenience
 const print = console.log.bind(console);
 

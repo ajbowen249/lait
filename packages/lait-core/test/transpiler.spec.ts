@@ -1,4 +1,4 @@
-import { parse, transpile, MultipleDefaultHandlersError } from '../src/transpiler';
+import { parse, transpile, MultipleDefaultHandlersError, generateDefinitions } from '../src/transpiler';
 
 const basicScript = `let x = 0;
 /(?<amount>\d+)/; {
@@ -56,6 +56,24 @@ describe('transpiler', () => {
 
         it('rejects a program with multiple default handlers', () => {
             expect(() => parse(`{} {}`)).toThrow(new MultipleDefaultHandlersError(0, 2));
+        });
+    });
+
+    describe('generateDefinitions', () => {
+        it('can add constants if desired', () => {
+            const result = generateDefinitions([
+                'x=12',
+                'FS=.',
+                'testBool=true',
+                'testBool2=false',
+            ]);
+
+            expect(result).toEqual([
+                'const x = 12;',
+                'FS = `.`;',
+                'const testBool = true;',
+                'const testBool2 = false;',
+            ]);
         });
     });
 

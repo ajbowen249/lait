@@ -5,6 +5,7 @@ import { transpile } from './transpiler';
 export async function run(
     inputScript: string,
     filePath: string,
+    define?: string[],
     transpileOnly?: boolean,
 ) {
     const templateFile = (await fs.readFile([__dirname, '../programTemplate.ts'].join('/'))).toString();
@@ -19,7 +20,7 @@ export async function run(
         cwd: process.cwd(),
     });
 
-    const transpiledScript = transpile(inputScript, filePath, templateFile);
+    const transpiledScript = transpile(inputScript, filePath, templateFile, define);
 
     if (transpileOnly) {
         console.log(transpiledScript);
