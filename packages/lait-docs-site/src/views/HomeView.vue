@@ -87,6 +87,18 @@ space-aligned data like in the <code>ls</code> example. That's less useful when 
 <p>Without <code>TRIM_EMPTY=false;</code>, the last line of that would have been:</p>
 <pre><code class="language-shell">Bob Nofunpants 4
 </code></pre>
+<h2>Command-Line Definitions</h2>
+<p>Variables can be declared via one or more instances of the <code>-d</code> (<code>--define</code>) command:</p>
+<pre><code class="language-shell">$ lait -d x=12 -d y=some_string 'print(x, y)'
+12 some_string
+</code></pre>
+<p>The <code>FS</code> and <code>TRIM_EMPTY</code> variables can also be overridden via this argument. The <code>Globals</code> example could have also been:</p>
+<pre><code class="language-shell">$ lait -d FS=, -d TRIM_EMPTY=false '{ print($[0], $[1] || `does not like movies :(`)  }' demo2.csv
+Name Favorite Film (Optional)
+Cathy Smith A Fistful of Dollars
+Paulo Henry MacMasterson III Finding Nemo
+Bob Nofunpants does not like movies :(
+</code></pre>
 <h2>Imports</h2>
 <p>You can import from the Node standard library, as well as any node modules you would expect to be accessible either globally or from a module installed in the working directory's <code>node_modules</code>. Note: This doesn't work in the interactive playground since it is run by the browser. Also note that imports from local files are not yet working.</p>
 <pre><code class="language-shell">$ lait 'import * as _ from &quot;lodash&quot;; print(_.isNumber(12));'
