@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 export interface ParsedArgs {
     named: { [index: string]: string|number|boolean|undefined };
     positional: string[];
@@ -16,12 +18,23 @@ export interface ArgSchema {
 }
 
 export function describe(schema: ArgSchema) {
-    console.log(`usage: lait <flags> ${schema.positional.map(x => `[${x.name}]`).join(' ')}`);
-    console.log('flags:');
-    for (const name of Object.keys(schema.named)) {
+    console.log(`usage: lait <options> ${schema.positional.map(x => `[${x.name}]`).join(' ')}`);
+    console.log('options:');
+
+    const pairs = Object.keys(schema.named).map(name => {
         const options = schema.named[name];
         const alias = Object.keys(schema.aliases).find(x => schema.aliases[x] === name);
-        console.log(`\t--${name}${alias ? ` (-${alias})` : ''}\t${options.description}`);
+        return {
+            left: `--${name}${alias ? ` (-${alias})` : ''}`,
+            right: options.description,
+        };
+    });
+
+    const targetLength = _.max(pairs.map(x => x.left.length))!;
+
+    for (const option of pairs) {
+        const filler = new Array(targetLength - option.left.length).fill(' ').join('');
+        console.log(`\t${option.left}${filler}\t${option.right}`);
     }
 }
 
