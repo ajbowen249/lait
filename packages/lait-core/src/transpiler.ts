@@ -140,7 +140,47 @@ export function parse(inputScript: string) {
     };
 }
 
-export function transpile(inputScript: string, inputFilePath: string, templateFile: string): string {
+const numberDefineRegex = /(?<name>\w+)=(?<value>\d+)/;
+const stringDefineRegex = /(?<name>\w+)=(?<value>.*)/;
+
+const overridableGlobals = [ 'FS', 'TRIM_EMPTY' ];
+
+export function generateDefinitions(define: string[]) {
+    const defs: string[] = [];
+
+    for (const def of define) {
+        const numMatch = numberDefineRegex.exec(def);
+        if (numMatch && numMatch.groups) {
+            const name = numMatch.groups.name;
+            const isDeclaration = !overridableGlobals.includes(name);
+            defs.push(`${isDeclaration ? 'const ' : ''}${numMatch.groups.name} = ${numMatch.groups.value};`);
+            continue;
+        }
+
+        const strMatch = stringDefineRegex.exec(def);
+        if (strMatch && strMatch.groups) {
+            const name = strMatch.groups.name;
+            const isDeclaration = !overridableGlobals.includes(name);
+            let value = strMatch.groups.value;
+
+            if (!['true', 'false'].includes(value)) {
+                value = '`' + value.replace(/\\/g, '\\\\').replace(/`/g, '\\`') + '`';
+            }
+
+            defs.push(`${isDeclaration ? 'const ' : ''}${name} = ${value};`);
+            continue;
+        }
+    }
+
+    return defs;
+}
+
+export function transpile(
+    inputScript: string,
+    inputFilePath: string,
+    templateFile: string,
+    define?: string[],
+): string {
     const {
         sourceFile,
         regexBlockPairs,
@@ -170,6 +210,11 @@ export function transpile(inputScript: string, inputFilePath: string, templateFi
     outputString = outputString.replace(
         '// IMPORT_STATEMENTS',
         importStatements.map(x => x.getText(sourceFile)).join('\n'),
+    );
+
+    outputString = outputString.replace(
+        '// CONSTANT_DEFINITIONS',
+        generateDefinitions(define || []).join('\n'),
     );
 
     outputString = outputString.replace(

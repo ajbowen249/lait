@@ -157,6 +157,25 @@ Without `TRIM_EMPTY=false;`, the last line of that would have been:
 Bob Nofunpants 4
 ```
 
+## Command-Line Definitions
+
+Variables can be declared via one or more instances of the `-d` (`--define`) command:
+
+```shell
+$ lait -d x=12 -d y=some_string 'print(x, y)'
+12 some_string
+```
+
+The `FS` and `TRIM_EMPTY` variables can also be overridden via this argument. The `Globals` example could have also been:
+
+```shell
+$ lait -d FS=, -d TRIM_EMPTY=false '{ print($[0], $[1] || `does not like movies :(`)  }' demo2.csv
+Name Favorite Film (Optional)
+Cathy Smith A Fistful of Dollars
+Paulo Henry MacMasterson III Finding Nemo
+Bob Nofunpants does not like movies :(
+```
+
 ## Imports
 
 You can import from the Node standard library, as well as any node modules you would expect to be accessible either
