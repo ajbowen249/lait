@@ -29,20 +29,35 @@ interface HandlerArg {
     type: string;
     scopeName: string;
     isOptional?: boolean;
+    inDefault?: boolean;
 }
 
 const handlerArgs: { [index: string]: HandlerArg } = {
-    $: { type: 'string[]', scopeName: 'fields' },
-    $_: { type: 'string', scopeName: 'line' },
+    $: { type: 'string[]', scopeName: 'fields', inDefault: true },
+    $_: { type: 'string', scopeName: 'line', inDefault: true },
     m: { type: 'RegExpMatchArray', scopeName: 'match' },
     g: { type: `RegExpMatchArray['groups']`, scopeName: 'match.groups', isOptional: true, },
 };
 
-const handlerArgsList = Object.keys(handlerArgs).map(x => ({ key: x, arg: handlerArgs[x] }))
+const handlerArgsList = Object.keys(handlerArgs)
+    .map(x => ({ key: x, arg: handlerArgs[x] }))
     .map(x => `${x.key}${x.arg.isOptional ? '?' : ''}: ${x.arg.type}`)
     .join(', ');
 
-const handlerScopeArgs = Object.keys(handlerArgs).map(x => ({ key: x, arg: handlerArgs[x] }))
+const handlerScopeArgs = Object.keys(handlerArgs)
+    .map(x => ({ key: x, arg: handlerArgs[x] }))
+    .map(x => x.arg.scopeName)
+    .join(', ');
+
+const defaultArgsList = Object.keys(handlerArgs)
+    .map(x => ({ key: x, arg: handlerArgs[x] }))
+    .filter(x => x.arg.inDefault)
+    .map(x => `${x.key}${x.arg.isOptional ? '?' : ''}: ${x.arg.type}`)
+    .join(', ');
+
+const defaultScopeArgs = Object.keys(handlerArgs)
+    .map(x => ({ key: x, arg: handlerArgs[x] }))
+    .filter(x => x.arg.inDefault)
     .map(x => x.arg.scopeName)
     .join(', ');
 
@@ -66,7 +81,9 @@ const processLine = async (line: string) => {
     }
 
     if (!handled) {
-        await LAIT_DEFAULT_HANDLER(fields);
+        await LAIT_DEFAULT_HANDLER(
+            ${defaultScopeArgs}
+        );
     }
 };
 `;
@@ -138,6 +155,11 @@ export function transpile(inputScript: string, inputFilePath: string, templateFi
     outputString = outputString.replace(
         '// HANDLER_ARGS_LIST',
         handlerArgsList,
+    );
+
+    outputString = outputString.replace(
+        '// DEFAULT_HANDLER_ARGS_LIST',
+        defaultArgsList,
     );
 
     outputString = outputString.replace(
