@@ -25,7 +25,9 @@ async function main() {
         // HANDLERS
     ];
 
-    let LAIT_DEFAULT_HANDLER = async ($: string[]) => {
+    let LAIT_DEFAULT_HANDLER = async (
+        // DEFAULT_HANDLER_ARGS_LIST
+    ) => {
         // DEFAULT_HANDLER
     };
 
