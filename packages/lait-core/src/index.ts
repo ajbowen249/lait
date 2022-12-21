@@ -4,12 +4,18 @@ import { exit } from 'process';
 import { AppArgs, argsSchema } from './appArgs';
 import { getArgs, describe } from './args';
 import { run } from './runner';
+import { LaitVersion } from './version';
 
 async function main() {
     const args = getArgs(process.argv, argsSchema) as AppArgs;
 
     if (args.named.help) {
         describe(argsSchema);
+        exit(0);
+    }
+
+    if (args.named.version) {
+        console.log(`${LaitVersion}`);
         exit(0);
     }
 
