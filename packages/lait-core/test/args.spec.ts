@@ -1,13 +1,15 @@
 import * as args from '../src/args';
 
 const schema: args.ArgSchema = {
-    aliases: { f: 'testFlag', n: 'testNum', s: 'testStr' },
+    aliases: { f: 'testFlag', n: 'testNum', s: 'testStr', na: 'testNumArray', sa: 'testStrArray' },
     named: {
         testNum: { parseAs: 'number' },
         testFlag: { isFlag: true, parseAs: 'boolean' },
         // not specifying isFlag means it takes the --testBool=true syntax and expect a value
         testBool: { parseAs: 'boolean' },
         testStr: {},
+        testNumArray: { parseAs: 'number[]' },
+        testStrArray: { parseAs: 'string[]' },
     },
     positional: [
         { name: 'pos0' },
@@ -22,6 +24,8 @@ interface TestArgs {
         testFlag?: boolean;
         testBool?: boolean;
         testStr?: string;
+        testNumArray?: number[];
+        testStrArray?: string[];
     },
     positional: string[];
 }
@@ -30,15 +34,21 @@ describe('args', () => {
     it('can parse args', () => {
         const result = args.getArgs([
             '', '', // First two are skipped
+            '-sa=a=b',
             '--testNum',
             '12',
             '-f',
+            '-na',
+            '1',
+            '-sa',
+            'part2',
             'firstPos',
             '--testBool',
             'false',
             'secondPos',
             '--testStr',
             'someString',
+            '-na=2',
             'lastPos'
         ], schema) as TestArgs;
 
@@ -46,6 +56,8 @@ describe('args', () => {
         expect(result.named.testFlag).toBe(true);
         expect(result.named.testBool).toBe(false);
         expect(result.named.testStr).toBe('someString');
+        expect(result.named.testNumArray).toStrictEqual([1, 2]);
+        expect(result.named.testStrArray).toStrictEqual(['a=b', 'part2']);
         expect(result.positional[0]).toBe('firstPos');
         expect(result.positional[1]).toBe('secondPos');
         expect(result.positional[2]).toBe('lastPos');
