@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.21",
     "markdown-it": "^13.0.1"
   },
   "devDependencies": {

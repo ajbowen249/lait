@@ -13,7 +13,6 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "prismjs": "^1.29.0",
     "run-p": "^0.0.0",
     "vue": "^3.2.45",
