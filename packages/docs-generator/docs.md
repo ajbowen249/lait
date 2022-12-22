@@ -5,6 +5,8 @@
 [_GitHub_](https://github.com/ajbowen249/lait),
 [_NPM_](https://www.npmjs.com/package/@ajbowen249/lait)
 
+![example workflow](https://github.com/ajbowen249/lait/actions/workflows/node.js.yml/badge.svg)
+
 <!-- #targets md -->
 > Check out the interactive version of these docs [here](https://ajbowen249.github.io/lait/)!
 <!-- #targets md,html -->

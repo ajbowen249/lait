@@ -3,6 +3,8 @@
 [_GitHub_](https://github.com/ajbowen249/lait),
 [_NPM_](https://www.npmjs.com/package/@ajbowen249/lait)
 
+![example workflow](https://github.com/ajbowen249/lait/actions/workflows/node.js.yml/badge.svg)
+
 > Check out the interactive version of these docs [here](https://ajbowen249.github.io/lait/)!
 
 `lait` is a command-line utility designed as an alternative to `awk`. Like `awk`, `lait` matches input line-by-line

@@ -4,6 +4,7 @@
 <h1>lait; an AWK-inspired TypeScript Command-Line Utility</h1>
 <p><a href="https://github.com/ajbowen249/lait"><em>GitHub</em></a>,
 <a href="https://www.npmjs.com/package/@ajbowen249/lait"><em>NPM</em></a></p>
+<p><img src="https://github.com/ajbowen249/lait/actions/workflows/node.js.yml/badge.svg" alt="example workflow"></p>
 <p><code>lait</code> is a command-line utility designed as an alternative to <code>awk</code>. Like <code>awk</code>, <code>lait</code> matches input line-by-line
 against a list of regular expressions and runs the first block of code it matches. Unlike <code>awk</code>, <code>lait</code> uses
 <code>TypeScript</code> as its scripting language.</p>
