@@ -1,6 +1,6 @@
 {
     "name": "@ajbowen249/lait",
-    "version": "0.1.11",
+    "version": "0.1.14",
     "license": "MIT",
     "bin": {
         "lait": "./packages/lait-core/dist/index.js"
