@@ -18,11 +18,11 @@ OrderId Item Quantity
 #d8j38 Avocado 2
 #8fh39 Shampoo 1
 #qb6ag Candle 3
-$ lait '/#\w{5} (?<name>\w+) (?<quantity>\d+)/; { print(g.name, g.q) }' demo_input
-16 Socks
-2 Avocado
-1 Shampoo
-3 Candle
+$ lait '/#\w{5} (?<name>\w+) (?<q>\d+)/; { print(g.name, g.q) }' demo_input
+Socks 16
+Avocado 2
+Shampoo 1
+Candle 3
 ```
 
 A `lait` program is just a `TypeScript` script. However, `lait` picks it apart and puts it into a wrapper program, where

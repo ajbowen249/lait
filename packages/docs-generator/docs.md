@@ -22,11 +22,11 @@ OrderId Item Quantity
 #d8j38 Avocado 2
 #8fh39 Shampoo 1
 #qb6ag Candle 3
-$ lait '/#\w{5} (?<name>\w+) (?<quantity>\d+)/; { print(g.name, g.q) }' demo_input
-16 Socks
-2 Avocado
-1 Shampoo
-3 Candle
+$ lait '/#\w{5} (?<name>\w+) (?<q>\d+)/; { print(g.name, g.q) }' demo_input
+Socks 16
+Avocado 2
+Shampoo 1
+Candle 3
 ```
 <!-- #targets html -->
 Here is an interactive version of that example. Both the input "file" and script are editable. Give it a try!
